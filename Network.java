@@ -28,7 +28,7 @@ public class Network {
     public User getUser(String name) {
 
         for (int i=0; i<users.length;i++) {
-            if (users[i].getName().equals(name)) {
+            if (users[i] != null && users[i].getName().equals(name)) {
                 return users[i];
             }
         }
@@ -40,7 +40,7 @@ public class Network {
     *  If the given name is already a user in this network, does nothing and returns false;
     *  Otherwise, creates a new user with the given name, adds the user to this network, and returns true. */
     public boolean addUser(String name) {
-        if (userCount <= users.length) {
+        if (userCount < users.length) {
             users[userCount] = new User(name);
             userCount++;
             return true;
@@ -52,12 +52,13 @@ public class Network {
      *  If any of the two names is not a user in this network,
      *  or if the "follows" addition failed for some reason, returns false. */
     public boolean addFollowee(String name1, String name2) {
-        if (getUser(name1).getfCount()<=10) {
-            getUser(name1).addFollowee(name2);
-            return true;
-
+        User user1 = getUser(name1);
+        User user2 = getUser(name2);
+        if (user1 != null && user2 != null) {
+            return user1.addFollowee(name2);
         }
         return false;
+    
     }
     
     /** For the user with the given name, recommends another user to follow. The recommended user is
